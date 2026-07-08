@@ -1,0 +1,9 @@
+# Confirmed dependencies (from official piper_sdk documentation)
+piper_sdk
+python-can>=3.3.4
+
+# TODO: 
+# numpy
+# roboticstoolbox-python
+# matplotlib
+# time
