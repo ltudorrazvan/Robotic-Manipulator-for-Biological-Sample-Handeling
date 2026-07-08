@@ -2,7 +2,10 @@
 A 6-DOF robotic prototype automating the sterilisation control test with biological indicators, aimed at small- and medium-sized hospitals.
 
 ## Demo
-[ASK: link or embed your demo video here]
+
+
+https://github.com/user-attachments/assets/21a6fb4d-3214-4c9d-89f8-d67e49fbd7de
+
 
 ## Problem
 Sterilisation technicians handle large volumes of repetitive pick-and-place tasks. These include sorting instruments, moving boxes, running control tests etc.. Studies show that 88.3% of sterilisation department staff experience musculoskeletal disorders as a result. Existing automated solutions (e.g. Gibotech's system) solve this, but their cost, size, and complexity make them inaccessible to small- and medium-sized hospitals.
