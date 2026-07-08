@@ -13,7 +13,7 @@ Sterilisation technicians handle large volumes of repetitive pick-and-place task
 **Problem formulation:** How can a robot manipulator be used to develop a prototype for performing a sterilisation control test with biological indicators in small- to medium-sized hospitals?
 
 ## Key Features
-- Automated insertion of biological indicator (BI) samples into incubator slots at a fixed 45° angle.
+- Automated insertion of biological indicator (BI) samples into incubator slots.
 - Automated placement and removal of the incubator lid.
 - Automated retrieval of incubated samples into an inspection tray.
 - Custom v-shaped parallel gripper (135°) for self-centring cylindrical samples.
@@ -72,7 +72,33 @@ bash can_activate.sh can0 1000000
 4. Position the workspace fixtures: BI-holding block, incubator, incubator lid holder, and BI inspection tray.
 
 ## Usage
-[ASK: what command(s) does someone run to execute a cycle?]
+**Before running:**
+1. Boot into Ubuntu
+2. Run the CAN discovery script to detect the adapter:
+```bash
+   bash find_all_can_port.sh
+```
+3. Activate the interface as `can0` (hardcoded in the script):
+```bash
+   bash can_activate.sh can0 1000000
+```
+4. Power on the Piper arm
+
+**Run the full cycle:**
+```bash
+python3 Full_BI_Cycle.py
+```
+
+**What happens:**
+- Connects over `can0` and waits until the arm reports itself enabled
+- Logs joint angles and the resulting end-effector pose to a CSV file at every waypoint, for accuracy verification
+- Runs the full sequence automatically: home → pick 3 BI samples from the BI holder (positions A1–A3) → insert each into its incubator slot (B1, B5, B10) → place the incubator lid → wait → remove the lid → retrieve the 3 samples into the sample tray → return to zero position
+- Longer moves use the LSPB trajectory planner (shown in the terminal as "TRAJ n ... (LSPB)"); short repositioning moves use direct joint control
+
+**Gripper is manual:** the script only drives the arm's joints — it does not control the gripper. Open/close it by hand (physical button) in sync with each pick/insert step, using the terminal's step label as your cue.
+
+**Stopping it:** the script has no automatic exit condition — once it reaches the final zero position, it keeps looping idly. Stop it with `Ctrl+C`.
+
 
 ## Results
 | Test | Outcome |
@@ -88,8 +114,7 @@ bash can_activate.sh can0 1000000
 - Linear vertical trajectories planned in joint space did not translate to straight-line motion in Cartesian space — the rotation test (planned in Cartesian space) performed better, confirming this.
 - Long, slim gripper jaws (needed to avoid collisions between samples) caused shaking and bending under load.
 - The incubator's height limited the manipulator's reachable orientations in parts of the workspace.
-- One of the team members didn't put enough effort into the project in the first half of the semester. This was solved by confronting the problem and laying out a plan for said team member. This improved our efficiency as a group.
-- Workspece constraints presented difficulties for the execution of some of the insertations of BI samples into the incubator slots. Simulating the workspace with the robots joint constraints before implementing the solution would resolve this issue.
+- Workspace constraints presented difficulties for the execution of some of the insertations of BI samples into the incubator slots. Simulating the workspace with the robots joint constraints before implementing the solution would resolve this issue.
   
 
 ## Future Improvements
@@ -101,5 +126,3 @@ bash can_activate.sh can0 1000000
 - Simulate the workspace and configure the positions of BI-holder, Incubaotr and BI-tray for better results.
 - Include autormation of retrieval of BI samples directly from the autoclave machine. 
 
-## License & Contact
-[ASK: license? list all 5 teammates + emails, or just you?]
